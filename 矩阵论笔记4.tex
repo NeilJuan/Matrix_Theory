@@ -1,0 +1,128 @@
+\documentclass[12pt]{article}
+\usepackage{color}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{left=1.5cm,right=1.5cm,top=2.5cm,bottom=2.5cm}
+\usepackage{latexsym,bm}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amssymb}%花体字母加粗
+\usepackage{mathrsfs}%花体字母
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{CJK}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{} %左上头脚注
+\chead{} %中间上头脚注
+\rhead{\bfseries University of Chinese Academy of Science}%右边上头 
+\lfoot{TianyangZhang} %左下头
+\cfoot{201728017419004}%中下头
+\rfoot{\thepage} %右下头
+
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+%Title-------------------------------------------
+\begin{titlepage}
+	
+\title{\protect \includegraphics[width=0.5in]{/Users/genius/Desktop/Pictures/UCAS.png} \Huge \textbf{矩阵论笔记4}}
+
+\author{张天阳\thanks{学号201728017419004}\\
+University of Chinese Academy of Science}
+\maketitle
+%end title----------------------------------------
+\end{titlepage}
+
+
+
+%目录------------------------------------------
+\tableofcontents
+
+\pagebreak
+%end 目录------------------------------------------
+
+%-----------------正文-----------
+\part{矩阵特征值虚部的界}
+\section{矩阵特征值与矩阵的一些性质}
+\subsection{矩阵拆分}
+任何矩阵$A$都可以拆分为：
+\begin{equation}
+	A=B+C,~~~~~B^T=B,~C^T=-C
+\end{equation}	
+\subsection{矩阵特征值与对称矩阵（或Hermite矩阵）性质：}
+\begin{enumerate}
+	\item 实对称矩阵（或Hermite矩阵）即$B^T=B$的特征值都为实数
+	\item 反对称矩阵（或反Hermite矩阵）即$C^T=-C$的特征值都为0或者纯虚数
+	\item \textcolor{blue}{所以A得特征值中的虚数部分长度的上界与C矩阵的特征值长度上界有关}
+	\item $C=\frac{1}{2}(A-A^T)$
+\end{enumerate}
+\section{矩阵特征值的虚部各种上界和各上界逼近排序}
+\subsection{最接近,矩阵2范数(谱范数)上界}
+\begin{align}
+	|\textbf{Im}(\lambda)|\leq\frac{\|A-A^T\|_2}{2}
+\end{align}
+\section{矩阵特征值的各种上界和各上界逼近排序}
+\subsection{次接近,矩阵1范数上界}
+\begin{align}
+	|\textbf{Im}(\lambda)|\leq\frac{\sqrt{2}\|A-A^T\|_1}{2}
+\end{align}
+\subsection{接着常用上界}
+\begin{equation}
+	|\textbf{Im}(\lambda)|\leq M\sqrt{\frac{n(n-1)}{2}},~~M=\frac{1}{2}\mathop{max}_{i,j}|a_{ij}-a_{ji}|\end{equation}
+\subsection{最不接近,矩阵无穷大范数上界}
+\begin{align}
+	|\textbf{Im}(\lambda)|\leq\frac{\|A-A^T\|_{m\infty}}{2}
+\end{align}
+\section{利用行列式来确定上界：Hadamard不等式}
+行列式为矩阵$A$构成的所有列向量作为边，在空间中所构成超平行四边形的体积。\\
+当每列模长不变时且仅当该组列向量构成超长方体即$A$为正交矩阵时体积最大。\\
+所以\begin{equation}
+	|A|\leq \prod_{i=1}^{n}|\bm a_i|^{\frac{1}{2}},~~~\bm a_i\mbox{为矩阵$A$的第i列}
+\end{equation}
+这就是Hadamard不等式。
+\subsection{简化行列式计算复杂度}
+求$A$的行列式可以对$A$进行QR分解，然后因为$R$为上三角矩阵且对角线元素都为1,所以$|A|=|Q|$而$Q$的行列式为$\prod_{i=1}^{n}|\bm q_i|^{\frac{1}{2}},~~~\bm q_i\mbox{为矩阵$q$的第i列}$。这样计算复杂度可以降低很多吧。
+\subsection{证明时常用不等式}
+\begin{align*}
+	f(x)=(\frac{a_1^x+a_2^x+...+a_n^x}{n})^{\frac{1}{x}}\\
+	f(x)\mbox{单调增加}\\
+	f(1)<f(2)\mbox{常用均值不等式}\\
+	f(0)={(a_1a_2...a_n)}^{\frac{1}{n}}\\
+	f(\infty)=max~a_i\\
+	f(-\infty)=min~a_i
+\end{align*}
+
+\section{GER圆}
+\subsection{每个特征值都在对应的Ger圆内}
+\paragraph{Ger圆描述：}
+\begin{equation}
+	|\lambda_i-a_{ii}|<\sum_{j,i\neq j}|a_{ij}
+\end{equation}
+也就是说第i个特征值位于以第i行的对角线元素为圆心，以其余所有元素的绝对值（模）的和为半径的圆内，该圆角Ger圆。
+\subsection{连通的Ger圆内的特征值个数等于连通的Ger圆个数}
+\subsection{连通的Ger圆内的特征值可在连通区域内连续运动连通区域内的特征值数量等于连通区域包含的Ger圆数目}
+\paragraph{解释：}
+\begin{align*}
+	A&=D+U~~\mbox{其中D是对角矩阵，U是对角线为0的矩阵}\\
+	A&=D+tU
+\end{align*}
+t从零不断变大，则Ger圆的半径不断变化，特征值的范围不断变化，但变换是连续的
+
+
+\subsection{特征值隔离问题}
+\begin{align*}
+	D=diag(d_1,d_2,...,d_n)\\
+	B=DAD^{-1}
+\end{align*}
+$D$左乘是第i行都乘以$d_i$,右乘$D^{-1}$是第i列都乘以$d_i$，所以对角线元素没变，半径变了。$B$与$A$特征值一样，所以可以先求A得Ger圆，用B将其独立的Ger圆半径搞大（独立Ger圆的行变大对应$d_i>1$）而相应的连通的Ger圆对应的行搞小，使得其半径减小以分离。
+
+%-----------------结束-----------
+\end{CJK*}
+\end{document}
+
+

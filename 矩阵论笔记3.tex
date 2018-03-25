@@ -1,0 +1,544 @@
+\documentclass[12pt]{article}
+\usepackage{color}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{left=1.5cm,right=1.5cm,top=2.5cm,bottom=2.5cm}
+\usepackage{latexsym,bm}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage{amsmath}
+\usepackage{amssymb}%花体字母加粗
+\usepackage{mathrsfs}%花体字母
+\usepackage{CJK}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{} %左上头脚注
+\chead{} %中间上头脚注
+\rhead{\bfseries University of Chinese Academy of Science}%右边上头 
+\lfoot{TianyangZhang} %左下头
+\cfoot{Note of Matrix Analysis}%中下头
+\rfoot{\thepage} %右下头
+
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+
+%Title-------------------------------------------
+\begin{titlepage}
+	
+\title{\protect \includegraphics[width=0.5in]{/Users/genius/Desktop/Pictures/UCAS.png} \Huge \textbf{矩阵论笔记3}}
+
+\author{张天阳\thanks{E-mail：zhangtianyang17@mails.ucas.edu.cn}\\
+University of Chinese Academy of Science}
+\maketitle
+%end title----------------------------------------
+\end{titlepage}
+
+
+
+%目录------------------------------------------
+\tableofcontents
+
+\pagebreak
+%end 目录------------------------------------------
+
+%-----------------正文-----------
+\part{矩阵分解}
+\section{Gauss消去法：}
+\begin{equation*}
+	A=\begin{bmatrix}
+	a_{11}&a_{12} &\cdots &a_{13} \\
+	a_{21}&a_{22} &\cdots &a_{23} \\
+	\vdots  &\vdots &\ddots &\vdots \\
+	a_{n1}&a_{n2}&\cdots &a_{n3}
+\end{bmatrix}
+\end{equation*}
+首先行变换左乘，列变换右乘\\
+每次高斯消去都是左乘第k次变换的矩阵$L_k$：
+\begin{equation}
+	L_k=I-\bm l_k\bm e^T
+\end{equation}
+\begin{equation}
+	\bm l_k=[0_1,0_2,0_3,...,0_{k},c_{k+1},c_{k+2},c_{k+3},...,c{n}]^T,~~0_k~means~kth~0
+\end{equation}
+因为每次高斯消去法都是将第 k 列消去，所以就是减去一个第 k 行从 $a_{kk}$ 开始往下都是$\frac{a_{k(k+i)}}{a_{kk}}$乘以第k行再减去自己，于是相当于乘以：
+\begin{equation}
+	\bm l_k\bm e^T=\begin{bmatrix}
+	0&\cdots & 0 &\cdots & 0\\
+	\vdots &\cdots & \vdots &\cdots & \vdots\\
+	0&\cdots & 0&\cdots & 0\\
+	\vdots &\cdots &0_{k,k}&\cdots & \vdots\\
+	0 &\cdots &\frac{a_{k,(k+1)}}{a_{k,k}}&\cdots & 0\\
+	0 &\cdots &\vdots &\cdots & 0\\
+	0 &\cdots &\frac{a_{k,(n)}}{a_{k,k}}&\cdots & 0\\
+\end{bmatrix}
+\end{equation}
+\begin{equation}
+	L=L_1L_2...L_n=I-\bm l_1\bm e^T-\bm l_2\bm e^T-...-\bm l_{n-1}\bm e^T
+\end{equation}
+则上三角矩阵$LA$可得。
+\section{三角分解：}
+\begin{equation}
+	A=LU
+\end{equation}
+先求出Gauss消去法的$L$。\\
+矩阵分解中$L$是Gauss中的$L^{-1}$
+\begin{equation}
+	L=L_1L_2...L_n=I+\bm l_1\bm e^T+\bm l_2\bm e^T+...+\bm l_{n-1}\bm e^T
+\end{equation}
+而$U$就是Gauss消去法所得到的上三角矩阵。
+\subsection{Doolittle分解}
+即将矩阵分解为$LDU$其中$U$为对角值为1的矩阵，而$D$则是对角矩阵，其实就是讲矩阵分解为$LU$之后将$U$逐行提取公因式，写作$D$。\\
+而$LU$则称为Doolittle分解。
+\subsection{Cholesky分解}
+Choleshy分解是将\textcolor{blue}{是对称正定矩阵$A$}分解为
+\begin{equation}
+	A=G^TG
+\end{equation}
+其是现将矩阵分解为：$LDU$形式:\\
+可得\begin{equation}
+	G=L\sqrt{D}
+\end{equation}
+即$D$的每个对角线的元素（$D$为对角矩阵）都开跟号
+
+\section{分块矩阵求逆}
+\subsection{行变换解析}
+\begin{equation}
+	\begin{bmatrix}
+	A& B \\
+	C& D 
+\end{bmatrix}=
+\begin{bmatrix}
+	A& B& \\
+	-CA^{-1}A+C& -CA^{-1}B+D& 
+\end{bmatrix},~~Gauss~Method
+\end{equation}
+相当于左乘（行变换），注：分块矩阵乘法是原来在左边的乘完还在左边。
+\begin{align*}
+	X=\begin{bmatrix}
+	1& &&  &&&\\
+	& 1&& &&&\\
+	& &1& &&&\\
+	& &&\ddots &&&\\
+	0&\cdots &x_{ij}&\cdots &1&\cdots &0\\
+	& && &&\ddots &\\
+	& && &&&1\\
+	\end{bmatrix},only~X_{ij}=x_{ij}\\
+	\textcolor{blue}{X=I+x_{ij}e_ie_j^T}
+\end{align*}
+这样的变换矩阵$X$，左乘$A$，$XA$相当于将$A$的第~i~行加上第~j~列乘以$x_{ij}$\\
+
+解释上面为什么是第一行左乘$CA^{-1}$在加到第二行，因为高斯消去法需要让第二行第一个元素为$O$所以要将第一行乘以（左乘是因为行变换是左乘，$CA^{-1}$是因为$A^{-1}C$的话消不掉$A$会变为$A^{-1}CA$)。
+\textbf{\textcolor{blue}{该行都同时乘以A的话是左乘，而该列都同时乘以A的话是右乘。}}
+\subsection{分块矩阵求逆}
+对下面分块矩阵求逆：应该先拓展，然后将其行变换为单位阵然后拓展阵自然变成它的逆。
+\begin{equation*}
+\begin{bmatrix}
+	A& B \\
+	C& D 
+\end{bmatrix}\Rightarrow 
+\begin{bmatrix}
+	A& B &I&O\\
+	C& D &O&I
+\end{bmatrix}
+\end{equation*}
+下面的式子第二行应该归一化，因为不然化三角时会让式子很长。
+\begin{align*}
+	\begin{bmatrix}
+	A& B &I&O\\
+	C& D &O&I
+\end{bmatrix}=\begin{bmatrix}
+	A& B& I&O\\
+	-CA^{-1}A+C& -CA^{-1}B+D& O-CA^{-1}B&I-CA^{-1}B
+\end{bmatrix}\\
+=\begin{bmatrix}
+	A& B & I &O\\
+	O& I& -(-CA^{-1}B+D)^{-1}CA^{-1}B& (-CA^{-1}B+D)^{-1}(I-CA^{-1}B)
+\end{bmatrix}\\
+=\begin{bmatrix}
+	A& O & I+B^{-1}(-CA^{-1}B+D)^{-1}CA^{-1}B &-B^{-1}(-CA^{-1}B+D)^{-1}\\
+	O& I& -(-CA^{-1}B+D)^{-1}CA^{-1}B& (-CA^{-1}B+D)^{-1}(I-CA^{-1}B)
+\end{bmatrix}
+\end{align*}
+\begin{equation*}
+	=\begin{bmatrix}
+	I& O & A^{-1}[I+B^{-1}(D-CA^{-1}B)^{-1}CA^{-1}B] &-A^{-1}[B^{-1}(D-CA^{-1}B)^{-1}]\\
+	O& I& -(D-CA^{-1}B)^{-1}CA^{-1}B& (D-CA^{-1}B)^{-1}(I-CA^{-1}B)
+\end{bmatrix}
+\end{equation*}
+所以其逆为：
+\begin{equation*}
+	=\begin{bmatrix}
+	 A^{-1}[I+B^{-1}(D-CA^{-1}B)^{-1}CA^{-1}B] &-A^{-1}[B^{-1}(D-CA^{-1}B)^{-1}]\\
+	-(D-CA^{-1}B)^{-1}CA^{-1}B& (D-CA^{-1}B)^{-1}(I-CA^{-1}B)
+\end{bmatrix}
+\end{equation*}
+
+\section{Givens矩阵（旋转矩阵）对向量操作：}
+\subsection{二维例子}
+顺时针旋转~$\theta$角(在极坐标系中角度增加$-\theta$)后空间中的向量$\bm x$为：
+因为极坐标中的$\bm x$为:
+\begin{equation*}
+	x_1=r\cdot cos(\varphi),~~x_2=r\cdot sin(\varphi)
+\end{equation*}
+\begin{equation}
+	\begin{bmatrix}
+	cos(\theta)&sin(\theta) \\
+	-sin(\theta)& cos(\theta) \\
+\end{bmatrix}\bm x=T_{12}\bm x
+\end{equation}
+用c表示$cos(\theta)$，s表示$sin(\theta)$
+
+\subsection{高维时的旋转矩阵}
+高纬时候其仍然一次只旋转两个维度，因为任意两个维度可以组成一个平面，然后在该平面上有上面二维的结论，故当旋转将~i~向着~j~旋转时：
+\begin{align*}
+	\bm x=[x_1,x_2,...,x_n]^T,~~~\bm y=T_{ij}\bm x=[y_1,y_2,...,y_n]^T\\
+	\begin{cases}
+		y_i=cx_i+sx_j\\
+		y_j=-sx_i+sx_j\\
+		y_k=x_k,~~~(if~k\neq i,j)
+	\end{cases}
+\end{align*}
+$T_{ij}$被叫做GIVENS矩阵
+\subsection{旋转定理}
+1.存在有限个Givens矩阵的乘积，记作$T$可以使$T\bm x=|\bm x|\bm e_1$,~~$\bm e_i$为仅仅只有第i维为1的单位列向量。\\
+2.同时也存在有限个Givens矩阵的乘积，记作$T$可以使$T\bm x=|\bm x|\bm z$，$z$为任意单位向量
+
+
+
+\section{Householder变换（初等反射变换）}
+\subsection{Householder矩阵定义与推导}
+\begin{equation}
+	H=I-2\bm u\bm u^T
+\end{equation}
+$\bm u$是$\bm x$要对称的超平面的法向量（单位向量，方向垂直于超平面），$\bm\mu$为图上与法向量方向相同的向量,推导：
+\begin{figure}[h]
+	\center
+  \includegraphics[width=4in]{/Users/genius/Desktop/MatrixAnslysisNote/1.png}
+  \caption{反射变换图}
+\end{figure}
+\begin{align*}
+	According~to~the~defination:~~H\bm x=\bm y\\
+	\bm x-\bm y =2\bm \mu\\
+	\Rightarrow (I-H)\bm x=2\bm \mu\\
+	Becasus~  \bm u^T\bm x=\|\bm \mu \|,~So~~\bm u\bm u^T\bm x=\bm \mu\\
+	\Rightarrow H=I-2\bm u\bm u^T
+\end{align*}
+\subsection{Householder变换性质}
+1.~~H矩阵性质：
+\begin{equation}
+	\begin{cases}
+		H^T=H~~~~,~~(\lambda~~is~~real~number)\\
+		H^TH=I,(Thus~H^T=H^{-1})~~~,~~H~is~Orthogonal~Matrix\\
+		H^2=I\\
+		H^{-1}=H\\
+		|H|=-1
+	\end{cases}
+\end{equation}
+2.~~对于任意$\bm x\in R^{n}$机器单位列向量$z\in R^{n}$存在Householder矩阵H，使得$Hx=|x|\bm z$，$z$为任意单位向量。\\
+3.~~任意Givens矩阵（旋转矩阵）可以由两个Householder矩阵相乘得到，但是Householder矩阵不可以由若干Givens矩阵相乘得到，因为$|G|=1,|H|=-1$。
+
+\section{矩阵的QR分解}
+\subsection{定义}
+矩阵的QR分解是将满秩矩阵$A$分解为$A=QR$其中$Q$为正交矩阵（酉矩阵$Q^TQ=I$）,而$R$则为上三角矩阵。
+\subsection{方法一：Schmidt正交化方法}
+因为$A$为满秩矩阵所以$A$的所有列是线性无关的，所以其所有列可以正交化得到一组正交基，将正交化的列放在一起便成了正交矩阵$B$。具体过程如下：
+\begin{enumerate}
+	\item 对于矩阵$A=(\bm a_1,\bm a_2,...,\bm a_n)$作正交化：Schmidt正交化过程可以想象一个下三角矩阵，其每个下标是$k_{ij}$而其第n行（每一行）都是$\bm b_n$对于$\bm a_n$的线性组合,而每行的$\bm b_k$表示列的下标。
+	\begin{align*}
+			\mbox{C的行为下面的列、}&\mbox{第一行、}\mbox{第二行...}\mbox{...第n
+		行}\\
+		\bm a_1&=\bm b_1\\
+		\bm a_2&=k_{21}\bm b_1+\bm b_2\\
+		\bm a_3&=k_{31}\bm b_1+k_{32}\bm b_2+\bm b_3\\
+		...\\
+		\bm a_n&=k_{n1}\bm b_1+k_{n2}\bm b_2+....+\bm b_n
+	\end{align*}
+	\textcolor{blue}{几何意义想象一下，第k行为$\bm a_k$在$\bm b_1,...,\bm b_k$的空间内的坐标，其中$k_{ij}$为第j个坐标的值为：$\bm a_k$在$\bm b_j$上的投影乘以单位化的$\bm b_{j}$即：}
+	\item 其中$\bm a_k$是已知要被分解的矩阵$A$的第k列，而$k_{ij}$为：
+	\begin{equation}
+		k_{ij}=\frac{(\bm a_i,\bm b_j)}{(\bm b_j,\bm b_j)}
+	\end{equation}
+	所以$k_{ii}=1$所以对角线上的k为1。于是可以得到$b_i$的公式：
+
+		\begin{align*}
+		\bm b_1&=\bm a_1\\
+		\bm b_2&=\bm a_2-k_{21}\bm b_1\\
+		\bm b_3&=\bm a_3-k_{31}\bm b_1-k_{32}\bm b_2\\
+		...\\ 
+		\bm b_n&=\bm a_n-k_{n1}\bm b_1-k_{n2}\bm b_2-....-k_{nn-1}\bm b_{n-1}
+	\end{align*}
+	所以$A=BC$，$C$为上面所述。\\
+	我们求出所有$\bm b_i$之后我们将其对角化之后便是$Q$
+	而对角化需要乘以对角矩阵:\\
+	$diag(1/\|\bm b_1\|,1/\|\bm b_2\|,...,1/\|\bm b_n\|)$\\
+	矩阵$diag(|\bm b_1\|,\|\bm b_2\|,...,\|\bm b_n\|)C$即为$R$
+	\item 综上所述可得$A=QR$
+\end{enumerate}
+\subsection{方法二：Givens矩阵变换得到QR分解}
+Givens变换$T_1$可以使得矩阵$A=(\bm a_1,\bm a_2,...,\bm a_n)$的第一列变为~$[\|\bm a_1\|,0,0,...,0]^T$,于是将矩阵A乘以$T_1$可以得到：($T_1$变换时最接近$A$,即将$A$用许多Givens变换变为上三角矩阵(R)时$T_1$为最接近$A$的那个左乘矩阵)
+\begin{equation}
+	T_1A=\begin{bmatrix}
+	\|\bm a_1\|& *&..&* \\
+	0& & \\
+	\vdots &&A_1\\
+	0& 
+\end{bmatrix}_{n\times n}
+\end{equation}
+再对$A_1$的第一列进行Givens变换$T_2A_1$
+\begin{equation}
+	T_2A_1=\begin{bmatrix}
+	\|\bm a^{(1)}_1\|& *&..&* \\
+	0& & \\
+	\vdots &&A_2\\
+	0& 
+\end{bmatrix}_{(n-1)\times (n-1)}
+\end{equation}
+以此类推：
+\begin{equation}
+	T=
+	\begin{bmatrix}
+	I_{n-2}& O \\
+	O& T_{n-1} 
+\end{bmatrix}\begin{bmatrix}
+	I_{n-3}& O \\
+	O& T_{n-2} 
+\end{bmatrix}...\begin{bmatrix}
+	1 &O \\
+	O& T_2 
+\end{bmatrix}T_1
+\end{equation}
+\begin{equation}
+	TA=R
+\end{equation}
+于是：
+\begin{equation}
+	A=T^{-1}R=QR
+\end{equation}
+\subsection{方法三：利用Householder变换得到QR分解}
+思路与用Givens矩阵得到QR分解一样也是先用变换矩阵T得到上三角矩阵R\\
+同样先对$A=(\bm a_1,\bm a_2,...,\bm a_n)$的第一列找到变换矩阵$H_1$使得$\bm a_1$变为：$\|\bm a_1\|\bm e_1$,然后以此类推。
+\begin{equation}
+	T=
+	\begin{bmatrix}
+	I_{n-2}& O \\
+	O& H_{n-1} 
+\end{bmatrix}\begin{bmatrix}
+	I_{n-3}& O \\
+	O& H_{n-2} 
+\end{bmatrix}...\begin{bmatrix}
+	1 &O \\
+	O& T_2 
+\end{bmatrix}T_1
+\end{equation}
+\begin{equation}
+	TA=R
+\end{equation}
+于是：
+\begin{equation}
+	A=T^{-1}R=T^TR=QR
+\end{equation}
+对于$H$的求解方法：$H=I-2\bm u\bm u^T$而对于$\bm u$的求解：
+\begin{align*}
+	\bm \mu= \bm a_1-\|\bm a_1\|\bm e_1\\
+	\bm u=\frac{\bm \mu}{\|\mu\|}
+\end{align*}
+\pagebreak
+\section{矩阵的满秩分解：FG分解}
+用于分解一些不是方阵（非方阵）的矩阵。\\
+分解方法：
+\begin{enumerate}
+	\item 用高斯消去法将待分解的矩阵转换为Hermite标准型（不是Hermite矩阵）\\
+	Hermite标准型：每一行第一个非零元素为1，前r行为非零行。
+	\item 取A的每个Hermite（标准型）对应的首1列（行的第一个非零的元素也就是1对应的列）组成F，而Hermite标准型的所有非零行构成G。
+\end{enumerate}
+\textcolor{blue}{满秩分解重要性质：$A_r^{m\times n}=F_r^{m\times r}G_r^{r\times n}$}
+
+\section{奇异值分解}
+\subsection{前序知识与回顾}
+\subsubsection{谱分解}
+如果\textbf{\textcolor{blue}{$A$是实对称矩阵}}那么A满足：
+\begin{equation}
+	Q^TAQ=diag(\lambda_1,\lambda_2,...,\lambda_n)\mbox{，其中Q为正交矩阵}
+\end{equation}
+如果A不是实数对称矩阵，但是$A$仍然非奇异，那么$A$可以分解为：
+\begin{equation}
+	P^TAQ=diag(\lambda_1,\lambda_2,...,\lambda_n)\mbox{，其中P与Q为正交矩阵}
+\end{equation}
+而奇异值分解为无任何条件的矩阵$A$可以分解为：
+\begin{equation}
+	U^HAV=\begin{bmatrix}
+	\Sigma_{r\times r} &O  \\
+	O&  O\\
+\end{bmatrix}
+\end{equation}
+即：$V$是左乘$A$的所以对于运算时用$A^TA$还是$AA^T$，可以先求出$V$或者$U$
+\begin{equation}
+	A=U\begin{bmatrix}
+	\Sigma_{r\times r} &O  \\
+	O&  O\\
+\end{bmatrix}V^H
+\end{equation}
+
+\subsection{奇异值分解}
+\subsubsection{思路与引理：其与前序的方法不同也不要求$A$是非奇异}
+\begin{enumerate}
+	\item 由于$A$虽然不是实对称矩阵,$A$为$\forall A\in \bm C^{m\times n} $，但是$A^TA$是Hermite矩阵（对称矩阵）所以其是半正定的。
+	\item 且$rank(A^TA)=rank(A)$
+	\item $A^TA=O$的冲要条件是$A=O$
+	\item 对$A^TA$进行谱分解可以得到：$V^TA^TAV=diag(\lambda_1,\lambda_2,...,\lambda_n)\mbox{，其中V为正交(酉)矩阵}$其中\textcolor{blue}{其中$\lambda_1,\lambda_2,...,\lambda_n$为矩阵$A^TA$的特征值,而$\sigma_i=\sqrt{\lambda_i},~(i=1,2,...,n)$被称为其奇异值。}\\
+对于V取其每一列$\bm v_i$可以发现：
+	\begin{equation}
+		A^TA\bm v_i=\bm v_i\lambda_i
+	\end{equation}
+	所以求出每个$\lambda_i$对应的特征向量$\bm \xi_i$,(零特征值的也求，重根也求，求n个嘛)（每个特征值只求一个即可），可得$V=(\bm\xi_1,\bm\xi_2,...,\bm\xi_n)$,
+\end{enumerate}
+\subsubsection{奇异值分解证明}
+\begin{enumerate}
+	\item 上一小节得到的矩阵$B=A^TA$的特征值对角矩阵$diag(\lambda_1,\lambda_2,...,\lambda_n)$其中有r个非零项，所以将其写为:
+	\begin{equation}
+		diag(\lambda_1,\lambda_2,...,\lambda_n)=\begin{bmatrix}
+	\Sigma^2_{r\times r} &O  \\
+	O&  O\\
+\end{bmatrix}
+	\end{equation}
+	\item 求出每个$\lambda_i$对应的特征向量,(零特征值的也求，重根也求，求n个嘛)（每个特征值只求一个即可），可得$(\bm\xi_1,\bm\xi_2,...,\bm\xi_n)$,由于谱分解的定律我们可以得到：
+	\begin{eqnarray*}
+		V^HA^TAV=\begin{bmatrix}
+	\Sigma^2_{r\times r} &O  \\
+	O&  O\\
+\end{bmatrix}\\
+V=(\bm\xi_1,\bm\xi_2,...,\bm\xi_n)
+	\end{eqnarray*}
+	取$V_{n\times n}$的前r列构成矩阵$V_1$可以得到：$V=[{V_1}_{(n\times r)}|{V_2}_{(n\times n-r)}]$\\
+	可知：\begin{equation}
+		V_1^HA^TAV_1=\Sigma^2_{(r\times r)}
+	\end{equation}
+	\item 可以将上式写成：\begin{align*}
+		A^TA=V_1\Sigma^2V_1^H,~\mbox{因为V正交}\\
+		\Rightarrow (AV_1\Sigma^{-1})^H(AV_1\Sigma^{-1})=I\\
+	\end{align*}
+	所以：令~$U_1=AV_1\Sigma^{-1}$可得
+	\begin{equation}
+		\begin{cases}
+			U_1^TU_1=I,~\mbox{得到$U_1$为正交矩阵}\\
+			U_1^HAV_1=\Sigma
+		\end{cases}
+	\end{equation}
+	让$U=[U_1|U_2]$其中$U_2$为随意列只要保证$U$正交即可：
+	因为：
+	\begin{align*}
+		U^HAV=&[U_1|U_2]^HA[V_1|V_2]\\
+		=&[U_1A|U_2A]^H[V_1|V_2]\\
+		=&\begin{bmatrix}
+	U_1^HAV_1&U_1^HAV_2  \\
+	U_2^HAV_1&U_2^HAV_2  \\
+\end{bmatrix}
+	\end{align*}
+\end{enumerate}
+又因为
+\begin{align*}
+	AV_1=U_1\Sigma \Rightarrow U_2^HAV_1=U_2^HU_1\Sigma=O,\mbox{（$U_2,U_1$正交）}\\
+	AV_2=O\\
+	U_1^HAV_1=\Sigma\\
+	\Rightarrow U^HAV=\begin{bmatrix}
+	\Sigma &O  \\
+	O&  O
+\end{bmatrix}
+\end{align*}
+\subsubsection{用$A^TA$奇异值分解使用方法}
+\textbf{\textcolor{blue}{记住$VA^TAV$在一起，即V为n阶方阵}}
+\begin{enumerate}
+	\item 得到的矩阵$B=A^TA$的特征值对角矩阵$diag(\lambda_1,\lambda_2,...,\lambda_n)$其中有r个非零项，所以将其写为:
+	\begin{equation}
+		diag(\lambda_1,\lambda_2,...,\lambda_n)=\begin{bmatrix}
+	\textcolor{blue}{\Sigma^2_{r\times r}} &O  \\
+	O&  O\\
+\end{bmatrix}
+	\end{equation}
+	\item 求出每个$\lambda_i$对应的特征向量,(零特征值的也求，重根也求，求n个嘛)（每个特征值只求一个即可），可得$(\bm\xi_1,\bm\xi_2,...,\bm\xi_n)$,由于谱分解的定律我们可以得到：
+	\begin{eqnarray*}
+		V^HA^TAV=\begin{bmatrix}
+	\Sigma^2_{r\times r} &O  \\
+	O&  O\\
+\end{bmatrix}\\
+V=(\bm\xi_1,\bm\xi_2,...,\bm\xi_n)
+	\end{eqnarray*}
+	取$V_{n\times n}$的前r列构成矩阵$V_1$可以得到：$V=[{V_1}_{(n\times r)}|{V_2}_{(n\times n-r)}]$\\
+	\item 令~$U_1=AV_1\Sigma^{-1}$(用$U_1^HAV=\Sigma$记忆。)可得
+	$U=[U_1|U_2]$让其中$U_2$为随意列只要保证$U$正交即可：
+	\item 则：
+	\begin{equation}
+		U^HAV=\begin{bmatrix}
+	\Sigma &O  \\
+	O&  O
+\end{bmatrix}
+	\end{equation}
+\end{enumerate}
+\subsubsection{用$AA^T$奇异值分解使用方法}
+\textbf{\textcolor{blue}{记住$UAA^TU$在一起，即U为m阶方阵}}
+\begin{enumerate}
+	\item 得到的矩阵$C=AA^T$的特征值对角矩阵$diag(\lambda_1,\lambda_2,...,\lambda_n)$其中有r个非零项，所以将其写为:
+	\begin{equation}
+		diag(\lambda_1,\lambda_2,...,\lambda_n)=\begin{bmatrix}
+	\textcolor{blue}{\Sigma^2_{l\times l}} &O  \\
+	O&  O\\
+\end{bmatrix}
+	\end{equation}
+	\item 求出每个$\lambda_i$对应的特征向量,(零特征值的也求，重根也求，求n个嘛)（每个特征值只求一个即可），可得$(\bm\eta_1,\bm\eta_2,...,\bm\eta_n)$,由于谱分解的定律我们可以得到：
+	\begin{eqnarray*}
+		U^HAA^TU=\begin{bmatrix}
+	\Sigma^2_{l\times l} &O  \\
+	O&  O\\
+\end{bmatrix}\\
+U=(\bm\eta_1,\bm\eta_2,...,\bm\eta_n)
+	\end{eqnarray*}
+	取$U_{n\times n}$的前r列构成矩阵$U_1$可以得到：$U=[{U_1}_{(n\times l)}|{U_2}_{(n\times n-l)}]$\\
+	\item 令~$V_1=(U_1^HA\Sigma^{-1})^H$可得
+	$V=[V_1|V_2]$让其中$V_2$为随意列只要保证$V$正交即可：
+	\item 则：
+	\begin{equation}
+		U^HAV=\begin{bmatrix}
+	\Sigma &O  \\
+	O&  O
+\end{bmatrix}
+	\end{equation}
+\end{enumerate}
+\subsection{奇异值分解的定理与应用}
+\subsubsection{定理}
+\begin{enumerate}
+	\item $A=\sigma_1\bm u_1\bm v_1^H+\sigma_2\bm u_2\bm v_2^H+...+\sigma_n\bm u_n\bm v_n^H$
+	\item $N(A)=L(\bm v_{r+1},\bm v_{r+2},...,\bm v_{r+n})$
+	\item $R(A)=L(\bm u_1,\bm u_2,...,\bm u_n)$
+\end{enumerate}
+\subsubsection{应用}
+数据复原上我们有了一些数据，就是数据矩阵上的一些点是已知$X_{ij},~(i,j)\in \mathscr{A} $的但是矩阵中存在未知的元素在里面。\\
+我们要求已知点被还原时满足
+\part{矩阵的特征值的重要性质：}
+\large
+\color{blue}
+\begin{enumerate}
+	\item 其中$\lambda(A)$代表$A$的特征值
+	\item \begin{align*}
+	\lambda(B)=1/\lambda(B^{-1}),\lambda(A^TA)=\lambda(AA^T)
+\end{align*}
+\item	即$A$的特征值是$\lambda$，则$A^{-1}$的特征值是$\frac{1}{\lambda}$
+\item	且$A^{k}$的特征值为$\lambda^k$
+\item $AA^T$的非零特征值为$A^TA$的非零特征值，$AB$与$BA$的非零特征值一样的，又因为$tr(AB)=tr(BA)$所以非零值不仅一样重数也一样。
+\color{black}
+\begin{align*}
+\mbox{推导}\\
+	A\bm x=\lambda \bm x,~~B\bm x=\beta \bm x\\
+	BA\bm x=B\lambda \bm x=\lambda B\bm x=\lambda \beta \bm x\\
+	AB\bm x=A\beta \bm x=\beta A\bm x=\beta\lambda  \bm x
+\end{align*}
+\end{enumerate}
+
+
+
+
+
+%-----------------结束-----------
+\end{CJK*}
+\end{document}
